@@ -1,0 +1,33 @@
+silo-blocks:
+  EXAMPLE_SILO:
+    block: BLUE_CONCRETE
+    storage-size: 50
+    combinable: true
+    default-weight: 1
+    weights:
+      - COAL:2
+      - IRON_BLOCK:3
+      - blahblah:2
+      - blah:3
+    mode: BLACKLIST # WHITELIST | BLACKLIST
+    blacklist:
+      - COAL
+      - IRON_BLOCK
+      - blahblah
+      - blah
+  EXAMPLE_SILO_2:
+    block: BLUE_CONCRETE
+    storage-size: 50
+    default-weight: 1
+    combinable: true
+    weights:
+      - COAL:2
+      - IRON_BLOCK:3
+      - blahblah:2
+      - blah:3
+    mode: WHITELIST # WHITELIST | BLACKLIST
+    whitelist: # Optional
+      - COAL
+      - IRON_BLOCK
+      - blahblah
+      - blah
