@@ -1,13 +1,13 @@
 package com.mortisdevelopment.mortissilo.block;
 
 import com.mortisdevelopment.mortissilo.MortisSilo;
+import com.mortisdevelopment.mortissilo.silo.SiloData;
 import com.mortisdevelopment.mortissilo.utils.ItemUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
@@ -53,11 +53,15 @@ public class SiloBlock {
         return item.clone();
     }
 
-    public void mine(MortisSilo plugin, Player player, Block block) {
+    public void mine(MortisSilo plugin, Block block) {
         block.setType(Material.AIR);
         SiloBlockData data = new SiloBlockData(plugin, block);
         data.dumpItems(block.getLocation());
+        if (data.isTerminalConnected()) {
+            SiloData siloData = data.getTerminal();
+            siloData.removeSiloBlock(block.getLocation());
+        }
         data.clear();
-        ItemUtils.give(player, getItem(), true);
+        ItemUtils.drop(block.getLocation(), getItem());
     }
 }

@@ -9,6 +9,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Getter
 public class SiloBlockManager {
@@ -48,20 +49,33 @@ public class SiloBlockManager {
         return new ArrayList<>(blockById.values());
     }
 
-    public Set<Location> getSiloLocations(Location center) {
+    public List<SiloBlockData> getSiloBlocks(Location center) {
+        return getSiloLocations(center).stream().map(location -> new SiloBlockData(plugin, location.getBlock())).collect(Collectors.toList());
+    }
+
+    public List<Location> getSiloLocations(Location center) {
         List<Location> connected = getDirectlyConnected(center, center);
-        Set<Location> locations = new HashSet<>(connected);
+        if (connected == null) {
+            return null;
+        }
+        List<Location> locations = new ArrayList<>(connected);
         while (!connected.isEmpty()) {
             connected = getIndirectlyConnected(center, connected, locations);
+            if (connected == null) {
+                return null;
+            }
             locations.addAll(connected);
         }
         return locations;
     }
 
-    public List<Location> getIndirectlyConnected(Location center, List<Location> connected, Set<Location> locations) {
+    private List<Location> getIndirectlyConnected(Location center, List<Location> connected, List<Location> locations) {
         List<Location> indirectlyConnected = new ArrayList<>();
         for (Location connectedLocation : connected) {
             List<Location> directlyConnected = getDirectlyConnected(center, connectedLocation);
+            if (directlyConnected == null) {
+                return null;
+            }
             for (Location directlyConnectedLocation : directlyConnected) {
                 if (locations.contains(directlyConnectedLocation)) {
                     continue;
@@ -72,7 +86,7 @@ public class SiloBlockManager {
         return indirectlyConnected;
     }
 
-    public List<Location> getDirectlyConnected(Location center, Location location) {
+    private List<Location> getDirectlyConnected(Location center, Location location) {
         List<Location> connected = new ArrayList<>();
         for (BlockFace face : faces) {
             Block block = location.getBlock().getRelative(face);
@@ -80,7 +94,11 @@ public class SiloBlockManager {
             if (blockLocation.distance(center) > settings.getRadius()) {
                 continue;
             }
-            if (isSiloBlock(block)) {
+            SiloBlockData siloBlockData = new SiloBlockData(plugin, block);
+            if (siloBlockData.isTerminalConnected()) {
+                return null;
+            }
+            if (!siloBlockData.isInvalid()) {
                 connected.add(blockLocation);
             }
         }

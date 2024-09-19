@@ -1,5 +1,6 @@
 silo-blocks:
   EXAMPLE_SILO:
+    item:
     block: BLUE_CONCRETE
     storage-size: 50
     combinable: true
@@ -16,6 +17,7 @@ silo-blocks:
       - blahblah
       - blah
   EXAMPLE_SILO_2:
+    item:
     block: BLUE_CONCRETE
     storage-size: 50
     default-weight: 1

@@ -1,5 +1,6 @@
 package com.mortisdevelopment.mortissilo.block;
 
+import com.destroystokyo.paper.event.block.BlockDestroyEvent;
 import com.mortisdevelopment.mortissilo.MortisSilo;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
@@ -51,6 +52,24 @@ public class SiloBlockListener implements Listener {
         e.setCancelled(true);
         e.setDropItems(false);
         e.setExpToDrop(0);
-        siloBlock.mine(plugin, e.getPlayer(), block);
+        siloBlock.mine(plugin, block);
+    }
+
+    @EventHandler
+    public void onDestroy(BlockDestroyEvent e) {
+        if (e.isCancelled()) {
+            return;
+        }
+        Block block = e.getBlock();
+        SiloBlockData data = siloBlockManager.getSiloBlockData(block);
+        if (data == null) {
+            return;
+        }
+        SiloBlock siloBlock = siloBlockManager.getSiloBlock(data.getId());
+        if (siloBlock == null) {
+            return;
+        }
+        e.setCancelled(true);
+        siloBlock.mine(plugin, block);
     }
 }

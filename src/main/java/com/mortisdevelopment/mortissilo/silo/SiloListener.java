@@ -4,17 +4,14 @@ import com.mortisdevelopment.mortissilo.block.SiloBlockManager;
 import com.mortisdevelopment.mortissilo.utils.ColorUtils;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.Sign;
+import org.bukkit.block.data.Directional;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.SignChangeEvent;
-import org.bukkit.scheduler.BukkitRunnable;
-
-import java.util.Set;
+import org.bukkit.event.player.PlayerInteractEvent;
 
 @Getter
 public class SiloListener implements Listener {
@@ -28,11 +25,19 @@ public class SiloListener implements Listener {
     }
 
     @EventHandler
-    public void onCreateSilo(SignChangeEvent e) {
+    public void onSiloInteract(PlayerInteractEvent e) {
+        if (e.useInteractedBlock().equals(Event.Result.DENY)) {
+            return;
+        }
+        
+    }
+
+    @EventHandler
+    public void onSiloCreate(SignChangeEvent e) {
         if (e.isCancelled()) {
             return;
         }
-        Component rawLine = e.line(0);
+        Component rawLine = e.line(siloManager.getSettings().getSignLine());
         if (rawLine == null) {
             return;
         }
@@ -40,36 +45,15 @@ public class SiloListener implements Listener {
         if (!line.equalsIgnoreCase(siloManager.getSettings().getSignText())) {
             return;
         }
-        Block against = e.getBlock();
-        if (!siloBlockManager.isSiloBlock(against)) {
+        Sign sign = (Sign) e.getBlock().getState();
+        Block firstSiloBlock = getFirstSiloBlock(sign);
+        if (!siloBlockManager.isSiloBlock(firstSiloBlock)) {
             return;
         }
-        siloManager.createSilo();
-        Set<Location>
-        Set<Location> locations = siloBlockManager.getSiloLocations(center.getLocation());
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                for (Location location : locations) {
-                    System.out.println(location);
-                    e.getPlayer().sendBlockChange(location, Bukkit.createBlockData(Material.STONE));
-                }
-            }
-        }.runTask(plugin);
+        siloManager.createSilo(sign, firstSiloBlock);
     }
 
-    @EventHandler
-    public void onCreateSilo2(BlockPlaceEvent e) {
-        Block center = e.getBlockAgainst();
-        Set<Location> locations = siloBlockManager.getSiloLocations(center.getLocation());
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                for (Location location : locations) {
-                    System.out.println(location);
-                    e.getPlayer().sendBlockChange(location, Bukkit.createBlockData(Material.STONE));
-                }
-            }
-        }.runTask(plugin);
+    private Block getFirstSiloBlock(Sign sign) {
+        return sign.getBlock().getRelative(((Directional) sign.getBlockData()).getFacing().getOppositeFace());
     }
 }
