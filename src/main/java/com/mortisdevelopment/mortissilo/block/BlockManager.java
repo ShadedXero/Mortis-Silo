@@ -12,7 +12,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Getter
-public class SiloBlockManager {
+public class BlockManager {
 
     private final BlockFace[] faces = {
             BlockFace.DOWN,
@@ -23,10 +23,10 @@ public class SiloBlockManager {
             BlockFace.WEST
     };
     private final MortisSilo plugin;
-    private final SiloBlockSettings settings;
+    private final BlockSettings settings;
     private final Map<String, SiloBlock> blockById;
 
-    public SiloBlockManager(MortisSilo plugin, SiloBlockSettings settings, Map<String, SiloBlock> blockById) {
+    public BlockManager(MortisSilo plugin, BlockSettings settings, Map<String, SiloBlock> blockById) {
         this.plugin = plugin;
         this.settings = settings;
         this.blockById = blockById;
@@ -49,8 +49,8 @@ public class SiloBlockManager {
         return new ArrayList<>(blockById.values());
     }
 
-    public List<SiloBlockData> getSiloBlocks(Location center) {
-        return getSiloLocations(center).stream().map(location -> new SiloBlockData(plugin, location.getBlock())).collect(Collectors.toList());
+    public List<BlockData> getSiloBlocks(Location center) {
+        return getSiloLocations(center).stream().map(location -> new BlockData(plugin, location.getBlock())).collect(Collectors.toList());
     }
 
     public List<Location> getSiloLocations(Location center) {
@@ -94,7 +94,7 @@ public class SiloBlockManager {
             if (blockLocation.distance(center) > settings.getRadius()) {
                 continue;
             }
-            SiloBlockData siloBlockData = new SiloBlockData(plugin, block);
+            BlockData siloBlockData = new BlockData(plugin, block);
             if (siloBlockData.isTerminalConnected()) {
                 return null;
             }
@@ -106,11 +106,11 @@ public class SiloBlockManager {
     }
 
     public boolean isSiloBlock(Block block) {
-        return !new SiloBlockData(plugin, block).isInvalid();
+        return !new BlockData(plugin, block).isInvalid();
     }
 
-    public SiloBlockData getSiloBlockData(Block block) {
-        SiloBlockData data = new SiloBlockData(plugin, block);
+    public BlockData getSiloBlockData(Block block) {
+        BlockData data = new BlockData(plugin, block);
         if (data.isInvalid()) {
             return null;
         }

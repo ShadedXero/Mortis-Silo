@@ -1,8 +1,8 @@
 package com.mortisdevelopment.mortissilo;
 
-import com.mortisdevelopment.mortissilo.block.SiloBlockListener;
-import com.mortisdevelopment.mortissilo.block.SiloBlockManager;
-import com.mortisdevelopment.mortissilo.block.SiloBlockSettings;
+import com.mortisdevelopment.mortissilo.block.BlockListener;
+import com.mortisdevelopment.mortissilo.block.BlockManager;
+import com.mortisdevelopment.mortissilo.block.BlockSettings;
 import lombok.Getter;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -15,11 +15,11 @@ public final class MortisSilo extends JavaPlugin {
     @Override
     public void onEnable() {
         // Plugin startup logic
-        SiloBlockManager siloBlockManager = new SiloBlockManager(new SiloBlockSettings(5));
-        getServer().getPluginManager().registerEvents(new SiloBlockListener(this, siloBlockManager), this);
+        BlockManager siloBlockManager = new BlockManager(new BlockSettings(5));
+        getServer().getPluginManager().registerEvents(new BlockListener(this, siloBlockManager), this);
     }
 
-    private SiloBlockSettings getSiloBlockSettings(ConfigurationSection section) {
+    private BlockSettings getSiloBlockSettings(ConfigurationSection section) {
         return null;
     }
 

@@ -1,9 +1,12 @@
 package com.mortisdevelopment.mortissilo.silo;
 
 import com.mortisdevelopment.mortissilo.MortisSilo;
-import com.mortisdevelopment.mortissilo.block.SiloBlockData;
+import com.mortisdevelopment.mortissilo.block.BlockData;
+import com.mortisdevelopment.mortissilo.block.BlockManager;
+import com.mortisdevelopment.mortissilo.data.BlockItem;
 import com.mortisdevelopment.mortissilo.data.mortissilo.SiloPersistentData;
 import com.mortisdevelopment.mortissilo.utils.LocationUtils;
+import com.mortisdevelopment.mortissilo.weights.WeightManager;
 import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.block.Sign;
@@ -70,8 +73,8 @@ public class SiloData extends SiloPersistentData {
         return getLocations(siloBlocksKey);
     }
 
-    public List<SiloBlockData> getSiloBlocks() {
-        return getSiloLocations().stream().map(location -> new SiloBlockData(plugin, location.getBlock())).collect(Collectors.toList());
+    public List<BlockData> getSiloBlocks() {
+        return getSiloLocations().stream().map(location -> new BlockData(plugin, location.getBlock())).collect(Collectors.toList());
     }
 
     public void removeSiloBlock(Location siloBlock) {
@@ -110,18 +113,54 @@ public class SiloData extends SiloPersistentData {
         removeLocation(outHoppersKey, outHopper);
     }
 
-    public List<ItemStack> getItems() {
-        List<ItemStack> items = new ArrayList<>();
-        for (SiloBlockData siloBlockData : getSiloBlocks()) {
-            items.addAll(siloBlockData.getItems());
+    public boolean store(BlockManager blockManager, WeightManager weightManager, ItemStack item) {
+        for (BlockData data : getSiloBlocks()) {
+            if (data.canStore(blockManager, weightManager, item)) {
+                data.addItem(item);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public List<BlockItem> getUniqueItems() {
+        List<BlockItem> items = new ArrayList<>();
+        for (BlockData siloBlockData : getSiloBlocks()) {
+            for (BlockItem blockItem : siloBlockData.getItems()) {
+                BlockItem found = findMatchingItem(items, blockItem);
+                if (found != null) {
+                    found.setAmount(found.getAmount() + blockItem.getAmount());
+                } else {
+                    items.add(blockItem);
+                }
+            }
         }
         return items;
     }
 
-    public void give(Player player, ItemStack item, int amount) {
-        for (SiloBlockData siloBlockData : getSiloBlocks()) {
-            items.addAll(siloBlockData.getItems());
+    private BlockItem findMatchingItem(List<BlockItem> items, BlockItem blockItem) {
+        for (BlockItem item : items) {
+            if (item.isItem(blockItem.getItem())) {
+                return item;
+            }
         }
-        return items;
+        return null;
+    }
+
+    public void give(Player player, ItemStack item, int amount) {
+        for (BlockData siloBlockData : getSiloBlocks()) {
+            BlockItem blockItem = siloBlockData.getItem(item);
+            if (blockItem == null) {
+                continue;
+            }
+            int blockAmount = blockItem.getAmount();
+            if (blockAmount < amount) {
+                blockItem.give(player);
+                amount -= blockAmount;
+            }else {
+                blockItem.give(player, amount);
+                break;
+            }
+        }
     }
 }

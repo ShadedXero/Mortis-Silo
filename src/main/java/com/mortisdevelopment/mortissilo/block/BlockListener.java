@@ -9,12 +9,12 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class SiloBlockListener implements Listener {
+public class BlockListener implements Listener {
 
     private final MortisSilo plugin;
-    private final SiloBlockManager siloBlockManager;
+    private final BlockManager siloBlockManager;
 
-    public SiloBlockListener(MortisSilo plugin, SiloBlockManager siloBlockManager) {
+    public BlockListener(MortisSilo plugin, BlockManager siloBlockManager) {
         this.plugin = plugin;
         this.siloBlockManager = siloBlockManager;
     }
@@ -41,7 +41,7 @@ public class SiloBlockListener implements Listener {
             return;
         }
         Block block = e.getBlock();
-        SiloBlockData data = siloBlockManager.getSiloBlockData(block);
+        BlockData data = siloBlockManager.getSiloBlockData(block);
         if (data == null) {
             return;
         }
@@ -61,7 +61,7 @@ public class SiloBlockListener implements Listener {
             return;
         }
         Block block = e.getBlock();
-        SiloBlockData data = siloBlockManager.getSiloBlockData(block);
+        BlockData data = siloBlockManager.getSiloBlockData(block);
         if (data == null) {
             return;
         }
@@ -70,6 +70,5 @@ public class SiloBlockListener implements Listener {
             return;
         }
         e.setCancelled(true);
-        siloBlock.mine(plugin, block);
     }
 }

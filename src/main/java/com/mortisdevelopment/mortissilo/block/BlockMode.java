@@ -1,6 +1,6 @@
 package com.mortisdevelopment.mortissilo.block;
 
-public enum SiloBlockMode {
+public enum BlockMode {
 
     WHITELIST,
     BLACKLIST

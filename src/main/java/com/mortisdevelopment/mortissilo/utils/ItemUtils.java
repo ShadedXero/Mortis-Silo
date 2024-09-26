@@ -30,6 +30,10 @@ public class ItemUtils {
         }
     }
 
+    public static void give(Player player, ItemStack item) {
+        give(player, item, true);
+    }
+
     public static void giveOnly(Player player, ItemStack item) {
         player.getInventory().addItem(item);
     }

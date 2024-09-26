@@ -1,10 +1,13 @@
 package com.mortisdevelopment.mortissilo.silo;
 
+import com.mortisdevelopment.mortissilo.data.BlockItem;
 import com.mortisdevelopment.mortissilo.utils.ColorUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
@@ -75,22 +78,24 @@ public class SiloMenu implements InventoryHolder {
 
     private List<ItemStack> getUniqueItems() {
         List<ItemStack> uniqueItems = new ArrayList<>();
-        for (ItemStack item : siloData.getItems()) {
+        for (BlockItem item : siloData.getUniqueItems()) {
             boolean unique = true;
             for (ItemStack uniqueItem : uniqueItems) {
-                if (uniqueItem.isSimilar(item)) {
+                if (item.isItem(uniqueItem)) {
                     unique = false;
                     break;
                 }
             }
             if (unique) {
-                uniqueItems.add(item);
+                uniqueItems.add(item.getItem());
             }
         }
         return uniqueItems;
     }
 
-    public void click(int slot, ItemStack cursor) {
+    public void click(InventoryClickEvent e) {
+        Player player = (Player) e.getWhoClicked();
+        int slot = e.getSlot();
         if (slot == previousPageSlot) {
             previousPage();
             return;
@@ -100,10 +105,13 @@ public class SiloMenu implements InventoryHolder {
             return;
         }
         if (slot == insertSlot) {
+            ItemStack cursor = e.getCursor();
             if (cursor == null || cursor.getType().isAir()) {
                 return;
             }
-            //TODO
+            if (siloData.store(siloManager.getSiloBlockManager(), siloManager.getWeightManager(), cursor)) {
+                player.setItemOnCursor(null);
+            }
             return;
         }
         if (slot >= 0 && slot <= inventoryEndingSlot) {
@@ -137,5 +145,9 @@ public class SiloMenu implements InventoryHolder {
         this.page = newPage;
         update();
         return true;
+    }
+
+    public void open(Player player) {
+        player.openInventory(inventory);
     }
 }
