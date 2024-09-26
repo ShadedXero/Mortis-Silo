@@ -40,6 +40,10 @@ public class SiloData extends SiloPersistentData {
         setSiloLocations(siloBlocks);
     }
 
+    public boolean isInvalid() {
+        return getSiloLocations().isEmpty();
+    }
+
     public List<Location> getLocations(String key) {
         String rawLocations = getString(key);
         if (rawLocations == null) {
@@ -156,9 +160,15 @@ public class SiloData extends SiloPersistentData {
             int blockAmount = blockItem.getAmount();
             if (blockAmount < amount) {
                 blockItem.give(player);
+                siloBlockData.removeItem(blockItem);
                 amount -= blockAmount;
             }else {
                 blockItem.give(player, amount);
+                if (blockAmount == amount) {
+                    siloBlockData.removeItem(blockItem);
+                }else {
+                    siloBlockData.updateAmount(blockItem);
+                }
                 break;
             }
         }

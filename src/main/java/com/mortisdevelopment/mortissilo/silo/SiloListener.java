@@ -1,9 +1,6 @@
 package com.mortisdevelopment.mortissilo.silo;
 
 import com.destroystokyo.paper.event.block.BlockDestroyEvent;
-import com.mortisdevelopment.mortissilo.block.BlockData;
-import com.mortisdevelopment.mortissilo.block.BlockManager;
-import com.mortisdevelopment.mortissilo.block.SiloBlock;
 import com.mortisdevelopment.mortissilo.utils.ColorUtils;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
@@ -14,7 +11,9 @@ import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.SignChangeEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.Inventory;
 
 @Getter
 public class SiloListener implements Listener {
@@ -26,11 +25,36 @@ public class SiloListener implements Listener {
     }
 
     @EventHandler
+    public void onClick(InventoryClickEvent e) {
+        if (e.isCancelled()) {
+            return;
+        }
+        Inventory inventory = e.getClickedInventory();
+        if (inventory == null || !(inventory.getHolder() instanceof SiloMenu menu)) {
+            return;
+        }
+        e.setCancelled(true);
+        menu.click(e);
+    }
+
+    @EventHandler
     public void onSiloInteract(PlayerInteractEvent e) {
         if (e.useInteractedBlock().equals(Event.Result.DENY)) {
             return;
         }
-        
+        Block block = e.getClickedBlock();
+        if (block == null || !(block.getState() instanceof Sign sign)) {
+            return;
+        }
+        SiloData data = siloManager.getSiloData(sign);
+        if (data == null) {
+            return;
+        }
+        e.setCancelled(true);
+        if (!e.getAction().isRightClick()) {
+            return;
+        }
+        new SiloMenu(siloManager, data).open(e.getPlayer());
     }
 
     @EventHandler
@@ -60,13 +84,11 @@ public class SiloListener implements Listener {
             return;
         }
         Block block = e.getBlock();
-
-        BlockData data = siloManager.getSiloBlockData(block);
-        if (data == null) {
+        if (!(block.getState() instanceof Sign sign)) {
             return;
         }
-        SiloBlock siloBlock = siloBlockManager.getSiloBlock(data.getId());
-        if (siloBlock == null) {
+        SiloData data = siloManager.getSiloData(sign);
+        if (data == null) {
             return;
         }
         e.setCancelled(true);

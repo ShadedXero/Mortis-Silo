@@ -1,0 +1,12 @@
+command-messages:
+  no-permission: "&cYou don't have permission to use this"
+  no-console: "&cThis command can only be executed by a player"
+  invalid-target: "&cPlease enter a valid player name"
+  invalid-amount: "&cPlease enter a valid amount"
+  invalid-rarity: "&cPlease enter a valid rarity"
+  invalid-pouch: "&cPlease enter a valid pouch"
+  wrong-usage: "&cPlease enter valid command arguments"
+  command-success: "&aSuccessfully processed the command"
+
+pouch-messages:
+  opening: "&aYou are opening the %pouch_name%"

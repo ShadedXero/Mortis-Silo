@@ -28,7 +28,10 @@ public class SiloManager {
 
     public SiloData getSiloData(Sign sign) {
         SiloData data = new SiloData(plugin, sign);
-
+        if (data.isInvalid()) {
+            return null;
+        }
+        return data;
     }
 
     public SiloData createSilo(Sign sign, Block firstSiloBlock) {
@@ -41,9 +44,5 @@ public class SiloManager {
         SiloData siloData = new SiloData(plugin, sign);
         siloData.create(locations);
         return siloData;
-    }
-
-    public void open(SiloData siloData) {
-
     }
 }

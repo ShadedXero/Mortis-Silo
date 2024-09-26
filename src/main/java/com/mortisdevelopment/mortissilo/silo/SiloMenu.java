@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.conversations.ConversationFactory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
@@ -27,12 +28,14 @@ public class SiloMenu implements InventoryHolder {
     private final int inventoryEndingSlot = 44;
     private final int bottomBarStartingSlot = 45;
     private int page = 1;
+    private final ConversationFactory factory;
     private final SiloManager siloManager;
     private final SiloData siloData;
     private final Inventory inventory;
     private final Map<Integer, List<ItemStack>> itemsByPage;
 
     public SiloMenu(SiloManager siloManager, SiloData siloData) {
+        this.factory = new ConversationFactory(siloManager.getPlugin());
         this.siloManager = siloManager;
         this.siloData = siloData;
         this.inventory = createInventory();
@@ -94,7 +97,7 @@ public class SiloMenu implements InventoryHolder {
     }
 
     public void click(InventoryClickEvent e) {
-        Player player = (Player) e.getWhoClicked();
+
         int slot = e.getSlot();
         if (slot == previousPageSlot) {
             previousPage();
@@ -104,6 +107,7 @@ public class SiloMenu implements InventoryHolder {
             nextPage();
             return;
         }
+        Player player = (Player) e.getWhoClicked();
         if (slot == insertSlot) {
             ItemStack cursor = e.getCursor();
             if (cursor == null || cursor.getType().isAir()) {
@@ -119,7 +123,7 @@ public class SiloMenu implements InventoryHolder {
             if (item == null || item.getType().isAir()) {
                 return;
             }
-
+            factory.withFirstPrompt(new AmountPrompt(siloData, item)).buildConversation(player).begin();
         }
     }
 

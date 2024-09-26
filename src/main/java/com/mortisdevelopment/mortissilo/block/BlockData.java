@@ -227,8 +227,12 @@ public class BlockData extends SiloPersistentData {
         setAmount(data.getSlot(), item.getAmount());
     }
 
-    public void removeItem(ItemStack item) {
+    public void removeItem(BlockItem item) {
+        removeItem(item.getSlot());
+    }
 
+    public void updateAmount(BlockItem blockItem) {
+        setAmount(blockItem.getSlot(), blockItem.getAmount());
     }
 
     public void give(Player player, ItemStack item, int amount) {

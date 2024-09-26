@@ -34,6 +34,22 @@ public class SiloBlock extends WeightManager {
         this.modeList = modeList;
     }
 
+    private boolean isModeItem(ItemStack item) {
+        for (ItemStack modeItem : modeList) {
+            if (modeItem.isSimilar(item)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean canStore(ItemStack item) {
+        return switch (mode) {
+            case BLACKLIST -> !isModeItem(item);
+            case WHITELIST -> isModeItem(item);
+        };
+    }
+
     public void place(MortisSilo plugin, Block block) {
         block.setType(material);
         new BlockData(plugin, block).create(id);
