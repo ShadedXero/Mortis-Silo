@@ -40,17 +40,10 @@ public class SiloMenu implements InventoryHolder {
         this.siloData = siloData;
         this.inventory = createInventory();
         this.itemsByPage = createPages();
-        update(false);
+        update();
     }
 
     public void update() {
-        update(true);
-    }
-
-    public void update(boolean create) {
-        if (create) {
-            createPages();
-        }
         List<ItemStack> items = itemsByPage.getOrDefault(page, new ArrayList<>());
         for (int i = 0; i < inventoryEndingSlot; i++) {
             if (i < items.size()) {
@@ -120,10 +113,17 @@ public class SiloMenu implements InventoryHolder {
             if (cursor == null || cursor.getType().isAir()) {
                 return;
             }
-            if (siloData.store(siloManager.getSiloBlockManager(), siloManager.getWeightManager(), cursor)) {
-                player.setItemOnCursor(null);
-                update();
+            ItemStack clone = cursor.clone();
+            clone.setAmount(1);
+            int amount = cursor.getAmount();
+            while (amount > 0) {
+                if (!siloData.store(siloManager.getSiloBlockManager(), siloManager.getWeightManager(), clone)) {
+                    break;
+                }
+                amount--;
             }
+            cursor.setAmount(amount);
+            update();
             return;
         }
         if (slot >= 0 && slot <= inventoryEndingSlot) {

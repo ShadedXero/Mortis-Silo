@@ -15,8 +15,8 @@ public class BlockItem {
 
     public BlockItem(int slot, ItemStack item, int amount) {
         this.slot = slot;
-        this.item = item;
-        item.setAmount(1);
+        this.item = item.clone();
+        this.item.setAmount(1);
         this.amount = amount;
     }
 
@@ -26,13 +26,17 @@ public class BlockItem {
 
     public void give(Player player) {
         for (int i = 0; i < amount; i++) {
-            ItemUtils.give(player, item);
+            ItemUtils.give(player, getItem());
         }
     }
 
     public void give(Player player, int amount) {
         for (int i = 0; i < amount; i++) {
-            ItemUtils.give(player, item);
+            ItemUtils.give(player, getItem());
         }
+    }
+
+    public ItemStack getItem() {
+        return item.clone();
     }
 }

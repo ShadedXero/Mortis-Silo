@@ -287,12 +287,11 @@ public class BlockData extends SiloPersistentData {
     public void destroy(BlockManager blockManager) {
         block.setType(Material.AIR);
         ItemUtils.drop(block.getLocation(), getSiloBlock(blockManager).getItem());
-        if (!isTerminalConnected()) {
-            return;
+        if (isTerminalConnected()) {
+            dumpItems();
+            SiloData siloData = getTerminal();
+            siloData.removeSiloBlock(block.getLocation());
         }
-        dumpItems();
-        SiloData siloData = getTerminal();
-        siloData.removeSiloBlock(block.getLocation());
         clear();
     }
 }

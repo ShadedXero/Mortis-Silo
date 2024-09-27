@@ -11,7 +11,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
-import java.util.List;
+import java.util.Set;
 
 @Getter
 public class SiloManager {
@@ -39,11 +39,10 @@ public class SiloManager {
     }
 
     public SiloData createSilo(Sign sign, Block firstSiloBlock) {
-        List<Location> locations = siloBlockManager.getSiloLocations(firstSiloBlock.getLocation());
+        Set<Location> locations = siloBlockManager.getSiloLocations(firstSiloBlock.getLocation());
         if (locations == null) {
             return null;
         }
-        sign.setEditable(false);
         for (Location location : locations) {
             BlockData siloBlockData = new BlockData(plugin, location.getBlock());
             siloBlockData.setTerminal(sign.getLocation());

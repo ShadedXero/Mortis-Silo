@@ -11,6 +11,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -51,10 +52,10 @@ public class SiloListener implements Listener {
         if (data == null) {
             return;
         }
-        e.setCancelled(true);
         if (!e.getAction().isRightClick()) {
             return;
         }
+        e.setCancelled(true);
         siloManager.open(data, e.getPlayer());
     }
 
@@ -101,7 +102,24 @@ public class SiloListener implements Listener {
     }
 
     @EventHandler
-    public void onDestroy(BlockDestroyEvent e) {
+    public void onBreak(BlockDestroyEvent e) {
+        if (e.isCancelled()) {
+            return;
+        }
+        Block block = e.getBlock();
+        if (!(block.getState() instanceof Sign sign)) {
+            return;
+        }
+        SiloData data = siloManager.getSiloData(sign);
+        if (data == null) {
+            return;
+        }
+        e.setCancelled(true);
+        data.destroy(siloManager.getSiloBlockManager());
+    }
+
+    @EventHandler
+    public void onExplode(BlockExplodeEvent e) {
         if (e.isCancelled()) {
             return;
         }

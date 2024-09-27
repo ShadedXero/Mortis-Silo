@@ -1,7 +1,6 @@
 package com.mortisdevelopment.mortissilo.block;
 
 import com.mortisdevelopment.mortissilo.MortisSilo;
-import com.mortisdevelopment.mortissilo.silo.SiloData;
 import com.mortisdevelopment.mortissilo.utils.ItemUtils;
 import com.mortisdevelopment.mortissilo.weights.WeightManager;
 import lombok.Getter;

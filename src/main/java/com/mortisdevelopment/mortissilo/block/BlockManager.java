@@ -56,12 +56,12 @@ public class BlockManager {
         return getSiloLocations(center).stream().map(location -> new BlockData(plugin, location.getBlock())).collect(Collectors.toList());
     }
 
-    public List<Location> getSiloLocations(Location center) {
-        List<Location> connected = getDirectlyConnected(center, center);
+    public Set<Location> getSiloLocations(Location center) {
+        Set<Location> connected = getDirectlyConnected(center, center);
         if (connected == null) {
             return null;
         }
-        List<Location> locations = new ArrayList<>(connected);
+        Set<Location> locations = new HashSet<>(connected);
         locations.add(center);
         while (!connected.isEmpty()) {
             connected = getIndirectlyConnected(center, connected, locations);
@@ -73,10 +73,10 @@ public class BlockManager {
         return locations;
     }
 
-    private List<Location> getIndirectlyConnected(Location center, List<Location> connected, List<Location> locations) {
-        List<Location> indirectlyConnected = new ArrayList<>();
+    private Set<Location> getIndirectlyConnected(Location center, Set<Location> connected, Set<Location> locations) {
+        Set<Location> indirectlyConnected = new HashSet<>();
         for (Location connectedLocation : connected) {
-            List<Location> directlyConnected = getDirectlyConnected(center, connectedLocation);
+            Set<Location> directlyConnected = getDirectlyConnected(center, connectedLocation);
             if (directlyConnected == null) {
                 return null;
             }
@@ -90,8 +90,8 @@ public class BlockManager {
         return indirectlyConnected;
     }
 
-    private List<Location> getDirectlyConnected(Location center, Location location) {
-        List<Location> connected = new ArrayList<>();
+    private Set<Location> getDirectlyConnected(Location center, Location location) {
+        Set<Location> connected = new HashSet<>();
         for (BlockFace face : faces) {
             Block block = location.getBlock().getRelative(face);
             Location blockLocation = block.getLocation();

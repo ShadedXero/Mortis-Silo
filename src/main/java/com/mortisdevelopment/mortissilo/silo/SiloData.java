@@ -16,6 +16,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Getter
@@ -37,8 +38,8 @@ public class SiloData extends SiloPersistentData {
         return sign.getLocation();
     }
 
-    public void create(List<Location> siloBlocks) {
-        setSiloLocations(siloBlocks);
+    public void create(Set<Location> siloBlocks) {
+        setSiloLocations(siloBlocks.stream().toList());
         sign.update();
     }
 
@@ -170,6 +171,7 @@ public class SiloData extends SiloPersistentData {
                 if (blockAmount == amount) {
                     siloBlockData.removeItem(blockItem);
                 } else {
+                    blockItem.setAmount(blockAmount - amount);
                     siloBlockData.updateAmount(blockItem);
                 }
                 break;
@@ -181,7 +183,7 @@ public class SiloData extends SiloPersistentData {
         for (BlockData data : getSiloBlocks()) {
             data.destroy(blockManager);
         }
-        sign.setType(Material.AIR);
+        sign.getBlock().setType(Material.AIR);
         clear();
     }
 }

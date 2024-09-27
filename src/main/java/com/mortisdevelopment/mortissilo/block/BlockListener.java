@@ -1,11 +1,11 @@
 package com.mortisdevelopment.mortissilo.block;
 
-import com.destroystokyo.paper.event.block.BlockDestroyEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -54,7 +54,7 @@ public class BlockListener implements Listener {
     }
 
     @EventHandler
-    public void onDestroy(BlockDestroyEvent e) {
+    public void onExplode(BlockExplodeEvent e) {
         if (e.isCancelled()) {
             return;
         }
