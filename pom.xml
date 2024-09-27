@@ -30,7 +30,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>3.2.4</version>
+        <version>3.5.3</version>
         <executions>
           <execution>
             <phase>package</phase>
@@ -38,6 +38,12 @@
               <goal>shade</goal>
             </goals>
             <configuration>
+                <relocations>
+                    <relocation>
+                        <pattern>com.jeff_media.customblockdata</pattern>
+                        <shadedPattern>com.mortisdevelopment.mortissilo.customblockdata</shadedPattern>
+                    </relocation>
+                </relocations>
               <createDependencyReducedPom>false</createDependencyReducedPom>
             </configuration>
           </execution>
@@ -81,7 +87,7 @@
           <groupId>org.projectlombok</groupId>
           <artifactId>lombok</artifactId>
           <version>1.18.34</version>
-          <scope>compile</scope>
+          <scope>provided</scope>
       </dependency>
   </dependencies>
 </project>

@@ -1,8 +1,8 @@
 coal:
   material: COAL
   weight: 5
-iron:
-  material: IRON
+iron-ingot:
+  material: IRON_INGOT
   weight: 10
 iron-block:
   material: IRON_BLOCK

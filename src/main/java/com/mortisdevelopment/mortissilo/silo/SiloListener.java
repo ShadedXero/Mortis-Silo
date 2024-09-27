@@ -62,6 +62,7 @@ public class SiloListener implements Listener {
         if (e.isCancelled()) {
             return;
         }
+        Sign sign = (Sign) e.getBlock().getState();
         Component rawLine = e.line(siloManager.getSettings().getSignLine());
         if (rawLine == null) {
             return;
@@ -70,12 +71,13 @@ public class SiloListener implements Listener {
         if (!line.equalsIgnoreCase(siloManager.getSettings().getSignText())) {
             return;
         }
-        Sign sign = (Sign) e.getBlock().getState();
         Block firstSiloBlock = getFirstSiloBlock(sign);
         if (!siloManager.getSiloBlockManager().isSiloBlock(firstSiloBlock)) {
             return;
         }
-        siloManager.createSilo(sign, firstSiloBlock);
+        if (siloManager.createSilo(sign, firstSiloBlock) != null) {
+            siloManager.getMessages().sendMessage(e.getPlayer(), "created");
+        }
     }
 
     @EventHandler

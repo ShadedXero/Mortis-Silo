@@ -1,4 +1,4 @@
 name: MortisSilo
-version: '${project.version}'
+version: ${project.version}
 main: com.mortisdevelopment.mortissilo.MortisSilo
 api-version: '1.18'

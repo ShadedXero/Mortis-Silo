@@ -38,6 +38,7 @@ public class SiloData extends SiloPersistentData {
 
     public void create(List<Location> siloBlocks) {
         setSiloLocations(siloBlocks);
+        sign.update();
     }
 
     public boolean isInvalid() {
@@ -54,6 +55,7 @@ public class SiloData extends SiloPersistentData {
 
     public void setLocations(String key, List<Location> locations) {
         setString(key, LocationUtils.getLocations(locations));
+        sign.update();
     }
 
     public void addLocation(String key, Location location) {

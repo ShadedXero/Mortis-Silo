@@ -22,9 +22,9 @@ import java.util.Map;
 public class SiloMenu implements InventoryHolder {
 
     private final int size = 54;
-    private final int insertSlot = 3;
-    private final int previousPageSlot = 1;
-    private final int nextPageSlot = 2;
+    private final int insertSlot = 49;
+    private final int previousPageSlot = 48;
+    private final int nextPageSlot = 50;
     private final int inventoryEndingSlot = 44;
     private final int bottomBarStartingSlot = 45;
     private int page = 1;
@@ -40,9 +40,17 @@ public class SiloMenu implements InventoryHolder {
         this.siloData = siloData;
         this.inventory = createInventory();
         this.itemsByPage = createPages();
+        update(false);
     }
 
     public void update() {
+        update(true);
+    }
+
+    public void update(boolean create) {
+        if (create) {
+            createPages();
+        }
         List<ItemStack> items = itemsByPage.get(page);
         for (int i = 0; i < inventoryEndingSlot; i++) {
             if (i < items.size()) {
@@ -114,6 +122,7 @@ public class SiloMenu implements InventoryHolder {
             }
             if (siloData.store(siloManager.getSiloBlockManager(), siloManager.getWeightManager(), cursor)) {
                 player.setItemOnCursor(null);
+                update();
             }
             return;
         }

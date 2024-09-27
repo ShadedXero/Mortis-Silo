@@ -1,6 +1,7 @@
 package com.mortisdevelopment.mortissilo.block;
 
 import com.destroystokyo.paper.event.block.BlockDestroyEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -29,7 +30,7 @@ public class BlockListener implements Listener {
         e.setCancelled(true);
         e.setBuild(false);
         item.subtract();
-        siloBlock.place(blockManager.getPlugin(), e.getBlockPlaced());
+        Bukkit.getScheduler().runTask(blockManager.getPlugin(), () -> siloBlock.place(blockManager.getPlugin(), e.getBlockPlaced()));
     }
 
     @EventHandler

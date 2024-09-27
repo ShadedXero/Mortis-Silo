@@ -44,10 +44,11 @@ public final class MortisSilo extends JavaPlugin {
         loadBlocks();
         getServer().getPluginManager().registerEvents(new BlockListener(blockManager), this);
 
-        siloManager = new SiloManager(this, blockManager, weightManager, getSiloSettings(config));
+        siloManager = new SiloManager(this, blockManager, weightManager, getSiloSettings(config), messageManager.getMessages("silo-messages"));
         getServer().getPluginManager().registerEvents(new SiloListener(siloManager), this);
 
         command = new SiloCommand(messageManager.getMessages("command-messages"), blockManager);
+        command.register(this);
     }
 
     private void loadWeights() {
@@ -64,7 +65,7 @@ public final class MortisSilo extends JavaPlugin {
         FileConfiguration blocks = YamlConfiguration.loadConfiguration(getFile("blocks.yml"));
         for (String key : blocks.getKeys(false)) {
             ConfigurationSection section = Objects.requireNonNull(blocks.getConfigurationSection(key));
-            ItemStack item = ItemBuilder.getItem(section);
+            ItemStack item = ItemBuilder.getItem(Objects.requireNonNull(section.getConfigurationSection("item")));
             Material material = Material.valueOf(section.getString("block"));
             double storage = section.getDouble("storage-size");
             BlockMode mode = BlockMode.valueOf(section.getString("mode"));

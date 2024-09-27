@@ -14,7 +14,6 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
@@ -100,7 +99,11 @@ public class BlockData extends SiloPersistentData {
     }
 
     public int[] getDeletedSlots() {
-        return getIntegerArray(deletedSlots);
+        int[] array = getIntegerArray(deletedSlots);
+        if (array == null) {
+            return new int[]{};
+        }
+        return array;
     }
 
     public void setDeletedSlots(int[] slots) {

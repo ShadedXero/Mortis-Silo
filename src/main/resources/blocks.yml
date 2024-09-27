@@ -17,7 +17,7 @@ EXAMPLE_BLOCK:
 
 EXAMPLE_BLOCK_2:
   item:
-    material: Red_CONCRETE
+    material: RED_CONCRETE
     name: "&aRed Silo Block"
     lore:
       - "&7Storage Size: 100"
