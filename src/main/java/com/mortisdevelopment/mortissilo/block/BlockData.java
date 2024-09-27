@@ -11,6 +11,7 @@ import com.mortisdevelopment.mortissilo.weights.Weight;
 import com.mortisdevelopment.mortissilo.weights.WeightManager;
 import lombok.Getter;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
@@ -249,10 +250,10 @@ public class BlockData extends SiloPersistentData {
         remove(maxSlotsKey);
     }
 
-    public void dumpItems(Location location) {
+    public void dumpItems() {
         for (BlockItem data : getItems()) {
             for (int i = 0; i < data.getAmount(); i++) {
-                ItemUtils.drop(location, data.getItem());
+                ItemUtils.drop(block.getLocation(), data.getItem());
             }
         }
         clearItems();
@@ -281,5 +282,17 @@ public class BlockData extends SiloPersistentData {
             totalWeight += weight.getWeight(data.getAmount());
         }
         return totalWeight;
+    }
+
+    public void destroy(BlockManager blockManager) {
+        block.setType(Material.AIR);
+        ItemUtils.drop(block.getLocation(), getSiloBlock(blockManager).getItem());
+        if (!isTerminalConnected()) {
+            return;
+        }
+        dumpItems();
+        SiloData siloData = getTerminal();
+        siloData.removeSiloBlock(block.getLocation());
+        clear();
     }
 }

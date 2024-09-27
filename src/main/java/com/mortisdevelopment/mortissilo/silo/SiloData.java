@@ -9,6 +9,7 @@ import com.mortisdevelopment.mortissilo.utils.LocationUtils;
 import com.mortisdevelopment.mortissilo.weights.WeightManager;
 import lombok.Getter;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -164,15 +165,23 @@ public class SiloData extends SiloPersistentData {
                 blockItem.give(player);
                 siloBlockData.removeItem(blockItem);
                 amount -= blockAmount;
-            }else {
+            } else {
                 blockItem.give(player, amount);
                 if (blockAmount == amount) {
                     siloBlockData.removeItem(blockItem);
-                }else {
+                } else {
                     siloBlockData.updateAmount(blockItem);
                 }
                 break;
             }
         }
+    }
+
+    public void destroy(BlockManager blockManager) {
+        for (BlockData data : getSiloBlocks()) {
+            data.destroy(blockManager);
+        }
+        sign.setType(Material.AIR);
+        clear();
     }
 }

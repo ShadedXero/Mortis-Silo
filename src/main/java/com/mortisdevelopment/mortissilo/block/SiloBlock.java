@@ -70,19 +70,4 @@ public class SiloBlock extends WeightManager {
     public ItemStack getItem() {
         return item.clone();
     }
-
-    public void mine(MortisSilo plugin, Block block) {
-        block.setType(Material.AIR);
-        ItemUtils.drop(block.getLocation(), getItem());
-        BlockData data = new BlockData(plugin, block);
-        if (!data.isTerminalConnected()) {
-            return;
-        }
-        data.dumpItems(block.getLocation());
-        if (data.isTerminalConnected()) {
-            SiloData siloData = data.getTerminal();
-            siloData.removeSiloBlock(block.getLocation());
-        }
-        data.clear();
-    }
 }

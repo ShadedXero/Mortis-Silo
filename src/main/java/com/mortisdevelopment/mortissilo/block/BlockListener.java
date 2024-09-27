@@ -50,7 +50,7 @@ public class BlockListener implements Listener {
         e.setCancelled(true);
         e.setDropItems(false);
         e.setExpToDrop(0);
-        siloBlock.mine(blockManager.getPlugin(), block);
+        data.destroy(blockManager);
     }
 
     @EventHandler
