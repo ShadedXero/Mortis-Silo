@@ -97,7 +97,6 @@ public class SiloMenu implements InventoryHolder {
     }
 
     public void click(InventoryClickEvent e) {
-
         int slot = e.getSlot();
         if (slot == previousPageSlot) {
             previousPage();

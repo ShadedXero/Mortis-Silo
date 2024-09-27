@@ -235,10 +235,6 @@ public class BlockData extends SiloPersistentData {
         setAmount(blockItem.getSlot(), blockItem.getAmount());
     }
 
-    public void give(Player player, ItemStack item, int amount) {
-
-    }
-
     public void clearItems() {
         for (int i = 1; i <= getMaxSlots(); i++) {
             removeItem(i);
@@ -257,7 +253,11 @@ public class BlockData extends SiloPersistentData {
     }
 
     public boolean canStore(BlockManager blockManager, WeightManager weightManager, ItemStack item) {
-        Weight weight = weightManager.getWeight(getSiloBlock(blockManager), item);
+        SiloBlock siloBlock = getSiloBlock(blockManager);
+        if (!siloBlock.canStore(item)) {
+            return false;
+        }
+        Weight weight = weightManager.getWeight(siloBlock, item);
         double availableWeight = getAvailableWeight(blockManager, weightManager);
         return availableWeight >= weight.getWeight(item.getAmount());
     }

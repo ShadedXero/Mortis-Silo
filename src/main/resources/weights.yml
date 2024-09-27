@@ -1,3 +1,9 @@
-COAL: 5
-IRON: 10
-IRON_BLOCK: 15
+coal:
+  material: COAL
+  weight: 5
+iron:
+  material: IRON
+  weight: 10
+iron-block:
+  material: IRON_BLOCK
+  weight: 15

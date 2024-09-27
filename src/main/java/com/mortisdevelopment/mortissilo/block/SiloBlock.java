@@ -9,6 +9,7 @@ import lombok.Setter;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
@@ -20,18 +21,20 @@ public class SiloBlock extends WeightManager {
     private final Material material;
     private final ItemStack item;
     private final double storage;
-    private final boolean combinable;
     private final BlockMode mode;
     private final List<ItemStack> modeList;
 
-    public SiloBlock(String id, Material material, ItemStack item, double storage, boolean combinable, BlockMode mode, List<ItemStack> modeList) {
+    public SiloBlock(String id, Material material, ItemStack item, double storage, BlockMode mode, List<ItemStack> modeList) {
         this.id = id;
         this.material = material;
         this.item = item;
         this.storage = storage;
-        this.combinable = combinable;
         this.mode = mode;
         this.modeList = modeList;
+    }
+
+    public void give(Player player) {
+        ItemUtils.give(player, getItem());
     }
 
     private boolean isModeItem(ItemStack item) {
@@ -45,6 +48,7 @@ public class SiloBlock extends WeightManager {
 
     public boolean canStore(ItemStack item) {
         return switch (mode) {
+            case NONE -> true;
             case BLACKLIST -> !isModeItem(item);
             case WHITELIST -> isModeItem(item);
         };

@@ -1,7 +1,6 @@
 package com.mortisdevelopment.mortissilo.block;
 
 import com.destroystokyo.paper.event.block.BlockDestroyEvent;
-import com.mortisdevelopment.mortissilo.MortisSilo;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -11,12 +10,10 @@ import org.bukkit.inventory.ItemStack;
 
 public class BlockListener implements Listener {
 
-    private final MortisSilo plugin;
-    private final BlockManager siloBlockManager;
+    private final BlockManager blockManager;
 
-    public BlockListener(MortisSilo plugin, BlockManager siloBlockManager) {
-        this.plugin = plugin;
-        this.siloBlockManager = siloBlockManager;
+    public BlockListener(BlockManager blockManager) {
+        this.blockManager = blockManager;
     }
 
     @EventHandler
@@ -25,14 +22,14 @@ public class BlockListener implements Listener {
             return;
         }
         ItemStack item = e.getItemInHand();
-        SiloBlock siloBlock = siloBlockManager.getSiloBlock(item);
+        SiloBlock siloBlock = blockManager.getSiloBlock(item);
         if (siloBlock == null) {
             return;
         }
         e.setCancelled(true);
         e.setBuild(false);
         item.subtract();
-        siloBlock.place(plugin, e.getBlockPlaced());
+        siloBlock.place(blockManager.getPlugin(), e.getBlockPlaced());
     }
 
     @EventHandler
@@ -41,18 +38,18 @@ public class BlockListener implements Listener {
             return;
         }
         Block block = e.getBlock();
-        BlockData data = siloBlockManager.getSiloBlockData(block);
+        BlockData data = blockManager.getSiloBlockData(block);
         if (data == null) {
             return;
         }
-        SiloBlock siloBlock = siloBlockManager.getSiloBlock(data.getId());
+        SiloBlock siloBlock = blockManager.getSiloBlock(data.getId());
         if (siloBlock == null) {
             return;
         }
         e.setCancelled(true);
         e.setDropItems(false);
         e.setExpToDrop(0);
-        siloBlock.mine(plugin, block);
+        siloBlock.mine(blockManager.getPlugin(), block);
     }
 
     @EventHandler
@@ -61,11 +58,11 @@ public class BlockListener implements Listener {
             return;
         }
         Block block = e.getBlock();
-        BlockData data = siloBlockManager.getSiloBlockData(block);
+        BlockData data = blockManager.getSiloBlockData(block);
         if (data == null) {
             return;
         }
-        SiloBlock siloBlock = siloBlockManager.getSiloBlock(data.getId());
+        SiloBlock siloBlock = blockManager.getSiloBlock(data.getId());
         if (siloBlock == null) {
             return;
         }

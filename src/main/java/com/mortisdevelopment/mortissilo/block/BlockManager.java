@@ -24,12 +24,15 @@ public class BlockManager {
     };
     private final MortisSilo plugin;
     private final BlockSettings settings;
-    private final Map<String, SiloBlock> blockById;
+    private final Map<String, SiloBlock> blockById = new HashMap<>();
 
-    public BlockManager(MortisSilo plugin, BlockSettings settings, Map<String, SiloBlock> blockById) {
+    public BlockManager(MortisSilo plugin, BlockSettings settings) {
         this.plugin = plugin;
         this.settings = settings;
-        this.blockById = blockById;
+    }
+
+    public void addSiloBlock(SiloBlock siloBlock) {
+        blockById.put(siloBlock.getId(), siloBlock);
     }
 
     public SiloBlock getSiloBlock(ItemStack item) {

@@ -1,35 +1,38 @@
-silo-blocks:
-  EXAMPLE_SILO:
-    item:
-    block: BLUE_CONCRETE
-    storage-size: 50
-    combinable: true
-    default-weight: 1
-    weights:
-      - COAL:2
-      - IRON_BLOCK:3
-      - blahblah:2
-      - blah:3
-    mode: BLACKLIST # WHITELIST | BLACKLIST
-    blacklist:
-      - COAL
-      - IRON_BLOCK
-      - blahblah
-      - blah
-  EXAMPLE_SILO_2:
-    item:
-    block: BLUE_CONCRETE
-    storage-size: 50
-    default-weight: 1
-    combinable: true
-    weights:
-      - COAL:2
-      - IRON_BLOCK:3
-      - blahblah:2
-      - blah:3
-    mode: WHITELIST # WHITELIST | BLACKLIST
-    whitelist: # Optional
-      - COAL
-      - IRON_BLOCK
-      - blahblah
-      - blah
+EXAMPLE_BLOCK:
+  item:
+    material: BLUE_CONCRETE
+    name: "&aBlue Silo Block"
+    lore:
+      - "&7Storage Size: 50"
+  block: BLUE_CONCRETE
+  storage-size: 50
+  weights:
+    coal:
+      material: COAL
+      weight: 2
+    iron-block:
+      material: IRON_BLOCK
+      weight: 3
+  mode: NONE # WHITELIST | BLACKLIST | NONE
+
+EXAMPLE_BLOCK_2:
+  item:
+    material: Red_CONCRETE
+    name: "&aRed Silo Block"
+    lore:
+      - "&7Storage Size: 100"
+  block: RED_CONCRETE
+  storage-size: 100
+  weights:
+    coal:
+      material: COAL
+      weight: 2
+    iron-block:
+      material: IRON_BLOCK
+      weight: 3
+  mode: WHITELIST # WHITELIST | BLACKLIST | NONE
+  whitelist: # Optional
+    coal:
+      material: COAL
+    iron-block:
+      material: IRON_BLOCK
