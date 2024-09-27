@@ -4,6 +4,8 @@ sign-text: "[Silo]"
 
 sign-line: 1
 
+menu-title: "&aSilo"
+
 filter-item:
   material: BLACK_STAINED_GLASS_PANE
   name: " "

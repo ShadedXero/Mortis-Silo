@@ -6,9 +6,11 @@ import com.mortisdevelopment.mortissilo.messages.MessageManager;
 import com.mortisdevelopment.mortissilo.silo.SiloListener;
 import com.mortisdevelopment.mortissilo.silo.SiloManager;
 import com.mortisdevelopment.mortissilo.silo.SiloSettings;
+import com.mortisdevelopment.mortissilo.utils.ColorUtils;
 import com.mortisdevelopment.mortissilo.utils.ItemBuilder;
 import com.mortisdevelopment.mortissilo.weights.WeightManager;
 import lombok.Getter;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -101,11 +103,12 @@ public final class MortisSilo extends JavaPlugin {
     private SiloSettings getSiloSettings(ConfigurationSection section) {
         String signText = section.getString("sign-text");
         int signLine = section.getInt("sign-line");
+        Component menuTitle = ColorUtils.getComponent(section.getString("menu-title"));
         ItemStack filterItem = ItemBuilder.getItem(Objects.requireNonNull(section.getConfigurationSection("filter-item")));
         ItemStack previousPageItem = ItemBuilder.getItem(Objects.requireNonNull(section.getConfigurationSection("previous-page-item")));
         ItemStack nextPageItem = ItemBuilder.getItem(Objects.requireNonNull(section.getConfigurationSection("next-page-item")));
         ItemStack insertItem = ItemBuilder.getItem(Objects.requireNonNull(section.getConfigurationSection("insert-item")));
-        return new SiloSettings(signText, signLine, filterItem, previousPageItem, nextPageItem, insertItem);
+        return new SiloSettings(signText, signLine, menuTitle, filterItem, previousPageItem, nextPageItem, insertItem);
     }
 
     private BlockSettings getBlockSettings(ConfigurationSection section) {

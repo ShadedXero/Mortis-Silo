@@ -1,7 +1,6 @@
 package com.mortisdevelopment.mortissilo.silo;
 
 import com.mortisdevelopment.mortissilo.data.BlockItem;
-import com.mortisdevelopment.mortissilo.utils.ColorUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
@@ -56,7 +55,7 @@ public class SiloMenu implements InventoryHolder {
     }
 
     private Inventory createInventory() {
-        Inventory inventory = Bukkit.createInventory(this, size, ColorUtils.getComponent("test"));
+        Inventory inventory = Bukkit.createInventory(this, size, siloManager.getSettings().getMenuTitle());
         for (int i = bottomBarStartingSlot; i < size; i++) {
             inventory.setItem(i, siloManager.getSettings().getFilterItem());
         }
