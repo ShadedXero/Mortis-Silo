@@ -32,7 +32,7 @@ public class SiloMenu implements InventoryHolder {
     private final SiloManager siloManager;
     private final SiloData siloData;
     private final Inventory inventory;
-    private final Map<Integer, List<ItemStack>> itemsByPage;
+    private Map<Integer, List<ItemStack>> itemsByPage;
 
     public SiloMenu(SiloManager siloManager, SiloData siloData) {
         this.factory = new ConversationFactory(siloManager.getPlugin());
@@ -44,6 +44,7 @@ public class SiloMenu implements InventoryHolder {
     }
 
     public void update() {
+        this.itemsByPage = createPages();
         List<ItemStack> items = itemsByPage.getOrDefault(page, new ArrayList<>());
         for (int i = 0; i < inventoryEndingSlot; i++) {
             if (i < items.size()) {
@@ -137,6 +138,7 @@ public class SiloMenu implements InventoryHolder {
     }
 
     private boolean hasPage(int page) {
+        update();
         return itemsByPage.get(page) != null;
     }
 
