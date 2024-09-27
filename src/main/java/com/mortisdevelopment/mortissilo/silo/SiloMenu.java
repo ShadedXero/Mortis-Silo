@@ -51,7 +51,7 @@ public class SiloMenu implements InventoryHolder {
         if (create) {
             createPages();
         }
-        List<ItemStack> items = itemsByPage.get(page);
+        List<ItemStack> items = itemsByPage.getOrDefault(page, new ArrayList<>());
         for (int i = 0; i < inventoryEndingSlot; i++) {
             if (i < items.size()) {
                 inventory.setItem(i, items.get(i));
@@ -131,7 +131,8 @@ public class SiloMenu implements InventoryHolder {
             if (item == null || item.getType().isAir()) {
                 return;
             }
-            factory.withFirstPrompt(new AmountPrompt(siloData, item)).buildConversation(player).begin();
+            close(player);
+            factory.withFirstPrompt(new AmountPrompt(siloManager, siloData, item)).buildConversation(player).begin();
         }
     }
 
@@ -161,5 +162,9 @@ public class SiloMenu implements InventoryHolder {
 
     public void open(Player player) {
         player.openInventory(inventory);
+    }
+
+    public void close(Player player) {
+        player.closeInventory();
     }
 }

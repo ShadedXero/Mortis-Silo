@@ -9,6 +9,7 @@ import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.entity.Player;
 
 import java.util.List;
 
@@ -50,5 +51,9 @@ public class SiloManager {
         SiloData siloData = new SiloData(plugin, sign);
         siloData.create(locations);
         return siloData;
+    }
+
+    public void open(SiloData data, Player player) {
+        new SiloMenu(this, data).open(player);
     }
 }

@@ -62,6 +62,7 @@ public class BlockManager {
             return null;
         }
         List<Location> locations = new ArrayList<>(connected);
+        locations.add(center);
         while (!connected.isEmpty()) {
             connected = getIndirectlyConnected(center, connected, locations);
             if (connected == null) {

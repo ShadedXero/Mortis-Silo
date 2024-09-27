@@ -99,11 +99,7 @@ public class BlockData extends SiloPersistentData {
     }
 
     public int[] getDeletedSlots() {
-        int[] array = getIntegerArray(deletedSlots);
-        if (array == null) {
-            return new int[]{};
-        }
-        return array;
+        return getIntegerArray(deletedSlots);
     }
 
     public void setDeletedSlots(int[] slots) {
@@ -112,6 +108,10 @@ public class BlockData extends SiloPersistentData {
 
     public void addDeletedSlot(int slot) {
         int[] oldSpaces = getDeletedSlots();
+        if (oldSpaces == null || oldSpaces.length == 0) {
+            setDeletedSlots(new int[]{slot});
+            return;
+        }
         int[] newSpaces = Arrays.copyOf(oldSpaces, oldSpaces.length + 1);
         newSpaces[newSpaces.length - 1] = slot;
         setDeletedSlots(newSpaces);
@@ -119,6 +119,9 @@ public class BlockData extends SiloPersistentData {
 
     public void removeDeletedSlot(int slot) {
         int[] oldSpaces = getDeletedSlots();
+        if (oldSpaces == null || oldSpaces.length == 0) {
+            return;
+        }
         int indexToRemove = -1;
         for (int i = 0; i < oldSpaces.length; i++) {
             if (oldSpaces[i] == slot) {
@@ -141,7 +144,7 @@ public class BlockData extends SiloPersistentData {
 
     public int getFirstDeletedSlot() {
         int[] spaces = getDeletedSlots();
-        if (spaces == null) {
+        if (spaces == null || spaces.length == 0) {
             return 0;
         }
         return spaces[0];
@@ -227,7 +230,7 @@ public class BlockData extends SiloPersistentData {
             setAmount(slot, item.getAmount());
             return;
         }
-        setAmount(data.getSlot(), item.getAmount());
+        setAmount(data.getSlot(), data.getAmount() + item.getAmount());
     }
 
     public void removeItem(BlockItem item) {

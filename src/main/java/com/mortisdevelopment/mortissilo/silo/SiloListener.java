@@ -54,7 +54,7 @@ public class SiloListener implements Listener {
         if (!e.getAction().isRightClick()) {
             return;
         }
-        new SiloMenu(siloManager, data).open(e.getPlayer());
+        siloManager.open(data, e.getPlayer());
     }
 
     @EventHandler

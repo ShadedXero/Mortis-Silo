@@ -9,10 +9,12 @@ import org.jetbrains.annotations.NotNull;
 
 public class AmountPrompt extends ValidatingPrompt {
 
+    private final SiloManager siloManager;
     private final SiloData data;
     private final ItemStack item;
 
-    public AmountPrompt(SiloData data, ItemStack item) {
+    public AmountPrompt(SiloManager siloManager, SiloData data, ItemStack item) {
+        this.siloManager = siloManager;
         this.data = data;
         this.item = item;
     }
@@ -20,8 +22,8 @@ public class AmountPrompt extends ValidatingPrompt {
     @Override
     public @NotNull String getPromptText(@NotNull ConversationContext context) {
         Player player = (Player) context.getForWhom();
-        player.sendMessage("Enter an amount");
-        return "Enter an amount";
+        siloManager.getMessages().sendMessage(player, "enter_amount");
+        return "";
     }
 
     @Override
@@ -30,7 +32,7 @@ public class AmountPrompt extends ValidatingPrompt {
         try {
             Integer.parseInt(input);
         } catch (NumberFormatException e) {
-            player.sendMessage("Please enter a valid amount");
+            siloManager.getMessages().sendMessage(player, "invalid_amount");
             return false;
         }
         return true;
@@ -41,7 +43,8 @@ public class AmountPrompt extends ValidatingPrompt {
         Player player = (Player) context.getForWhom();
         int amount = Integer.parseInt(input);
         data.give(player, item, amount);
-        player.sendMessage("Successfully renamed the region");
+        siloManager.getMessages().sendMessage(player, "item_received");
+        siloManager.open(data, player);
         return null;
     }
 }
