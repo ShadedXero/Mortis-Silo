@@ -148,7 +148,9 @@ public class BlockData extends SiloPersistentData {
         if (spaces == null || spaces.length == 0) {
             return 0;
         }
-        return spaces[0];
+        int slot = spaces[0];
+        removeDeletedSlot(slot);
+        return slot;
     }
 
     public int getAvailableSlot() {

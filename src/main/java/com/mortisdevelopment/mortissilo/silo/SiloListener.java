@@ -14,6 +14,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 
@@ -37,6 +38,14 @@ public class SiloListener implements Listener {
         }
         e.setCancelled(true);
         menu.click(e);
+    }
+
+    @EventHandler
+    public void onDrag(InventoryDragEvent e) {
+        if (e.isCancelled() || !(e.getInventory().getHolder() instanceof SiloMenu)) {
+            return;
+        }
+        e.setCancelled(true);
     }
 
     @EventHandler

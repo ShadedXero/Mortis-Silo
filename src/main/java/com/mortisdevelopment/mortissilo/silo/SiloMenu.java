@@ -38,14 +38,13 @@ public class SiloMenu implements InventoryHolder {
         this.siloManager = siloManager;
         this.siloData = siloData;
         this.inventory = createInventory();
-        this.itemsByPage = createPages();
         update();
     }
 
     public void update() {
         this.itemsByPage = createPages();
         List<ItemStack> items = itemsByPage.getOrDefault(page, new ArrayList<>());
-        for (int i = 0; i < inventoryEndingSlot; i++) {
+        for (int i = 0; i <= inventoryEndingSlot; i++) {
             if (i < items.size()) {
                 inventory.setItem(i, items.get(i));
             }else {
@@ -137,7 +136,6 @@ public class SiloMenu implements InventoryHolder {
     }
 
     private boolean hasPage(int page) {
-        update();
         return itemsByPage.get(page) != null;
     }
 
