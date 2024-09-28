@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Getter @Setter
 public class SiloMenu implements InventoryHolder {
@@ -69,7 +70,7 @@ public class SiloMenu implements InventoryHolder {
         int page = 1;
         int index = 0;
         for (ItemStack item : getUniqueItems()) {
-            if (index >= 53) {
+            if (index > inventoryEndingSlot) {
                 page++;
                 index = 0;
             }
@@ -80,21 +81,25 @@ public class SiloMenu implements InventoryHolder {
     }
 
     private List<ItemStack> getUniqueItems() {
-        List<ItemStack> uniqueItems = new ArrayList<>();
-        for (BlockItem item : siloData.getUniqueItems()) {
-            boolean unique = true;
-            for (ItemStack uniqueItem : uniqueItems) {
-                if (item.isItem(uniqueItem)) {
-                    unique = false;
-                    break;
-                }
-            }
-            if (unique) {
-                uniqueItems.add(item.getItem());
-            }
-        }
-        return uniqueItems;
+        return siloData.getUniqueItems().stream().map(BlockItem::getItem).collect(Collectors.toList());
     }
+
+//    private List<ItemStack> getUniqueItems() {
+//        List<ItemStack> uniqueItems = new ArrayList<>();
+//        for (BlockItem item : siloData.getUniqueItems()) {
+//            boolean unique = true;
+//            for (ItemStack uniqueItem : uniqueItems) {
+//                if (item.isItem(uniqueItem)) {
+//                    unique = false;
+//                    break;
+//                }
+//            }
+//            if (unique) {
+//                uniqueItems.add(item.getItem());
+//            }
+//        }
+//        return uniqueItems;
+//    }
 
     public void click(InventoryClickEvent e) {
         int slot = e.getSlot();
