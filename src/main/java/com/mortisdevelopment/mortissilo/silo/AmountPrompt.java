@@ -29,13 +29,19 @@ public class AmountPrompt extends ValidatingPrompt {
     @Override
     protected boolean isInputValid(@NotNull ConversationContext context, @NotNull String input) {
         Player player = (Player) context.getForWhom();
-        try {
-            Integer.parseInt(input);
-        } catch (NumberFormatException e) {
+        if (!isValid(input)) {
             siloManager.getMessages().sendMessage(player, "invalid_amount");
             return false;
         }
         return true;
+    }
+    
+    private boolean isValid(String input) {
+        try {
+            return Integer.parseInt(input) > 0;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 
     @Override
